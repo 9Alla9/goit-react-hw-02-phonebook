@@ -16,10 +16,14 @@ class App extends Component {
     filter: '',
   };
   addName = ({ name, number }) => {
-    const names = this.state.contacts.map(contact => contact.name);
-    if (names.indexOf(name) >= 0) {
-      alert(name + ' is already in contacts');
-      return;
+    if (
+      this.state.contacts.find(
+        contact =>
+          contact.name.toLowerCase() === name.toLowerCase() ||
+          contact.number === number
+      )
+    ) {
+      return alert(`${name} or ${number} is contacts`);
     }
     this.setState(prevState => {
       return {
@@ -27,16 +31,10 @@ class App extends Component {
       };
     });
   };
-  removeName = idx => {
-    this.setState(prevState => {
-      let newContacts = [];
-      prevState.contacts.forEach(contact => {
-        if (contact.id !== idx) {
-          newContacts.push(contact);
-        }
-      });
-      return { contacts: newContacts };
-    });
+  removeName = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
   };
   handleFilter = e => {
     this.setState({ filter: e.currentTarget.value });
